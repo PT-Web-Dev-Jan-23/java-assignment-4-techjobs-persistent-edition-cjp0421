@@ -2,7 +2,6 @@ package org.launchcode.techjobs.persistent.models;
 
 import java.util.Objects;
 
-
 public abstract class AbstractEntity {
 
     private int id;
