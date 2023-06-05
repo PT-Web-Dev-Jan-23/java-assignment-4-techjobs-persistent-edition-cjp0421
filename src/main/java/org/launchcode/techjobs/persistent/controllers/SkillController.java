@@ -22,28 +22,11 @@ public class SkillController {
 
     @GetMapping("")
     public String index(Model model) {
+        model.addAttribute("title", "All Skills");
         model.addAttribute("skills",skillRepository.findAll());
         return "skills/index";
     }
 
-
-    @GetMapping("view")
-    public String displayAllSkills(@RequestParam(required=false) Integer skillId, Model model){
-        if(skillId == null){
-            model.addAttribute("title", "All Skills");
-            model.addAttribute("skills", skillRepository.findAll());
-        } else {
-            Optional<Skill> result = skillRepository.findById(skillId);
-            if(result.isEmpty()){
-                model.addAttribute("title","Invalid Skill Id: " + skillId);
-            } else {
-                Skill skill = result.get();
-                model.addAttribute("title", "Skill with ID" + skillId);
-                model.addAttribute("skill",skill.getName());
-            }
-        }
-        return "skills/index";
-    }
 
     @GetMapping("add")
     public String displayAddSkillForm(Model model) {
@@ -56,17 +39,16 @@ public class SkillController {
     public String processAddSkillForm(@ModelAttribute @Valid Skill newSkill,
                                          Errors errors, Model model) {
 
-        if(!errors.hasErrors()) {
+        if(errors.hasErrors()) {
 
-            if (!skillRepository.toString().contains(newSkill.getName())) {
-                Skill skill = skillRepository.save(newSkill);
-                model.addAttribute("skill", skill);
-            }
+                return "skills/add";
+            } else{
+            skillRepository.save(newSkill);
+        }
             return "redirect:";
         }
 
-        return "redirect:";
-    }
+
 
     @GetMapping("view/{skillId}")
     public String displayViewSkill(Model model, @PathVariable int skillId) {
