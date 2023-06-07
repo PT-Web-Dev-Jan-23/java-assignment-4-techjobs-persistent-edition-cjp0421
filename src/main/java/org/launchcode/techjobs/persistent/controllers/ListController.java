@@ -3,10 +3,10 @@ package org.launchcode.techjobs.persistent.controllers;
 import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.Job;
 import org.launchcode.techjobs.persistent.models.Skill;
-import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
-import org.launchcode.techjobs.persistent.models.data.JobRepository;
+import org.launchcode.techjobs.persistent.data.EmployerRepository;
+import org.launchcode.techjobs.persistent.data.JobRepository;
 import org.launchcode.techjobs.persistent.models.JobData;
-import org.launchcode.techjobs.persistent.models.data.SkillRepository;
+import org.launchcode.techjobs.persistent.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,15 +44,27 @@ public class ListController {
 
     @RequestMapping("")
     public String list(Model model) {
-
+        Iterable<Job> jobs;
+        Iterable<Employer> employers = new ArrayList<>();
+        Iterable<Skill> skills = new ArrayList<>();
+        jobs = jobRepository.findAll();
+        employers = employerRepository.findAll();
+        skills = skillRepository.findAll();
+        model.addAttribute("jobs",jobs);
+        model.addAttribute("employers", employers);
+        model.addAttribute("skills", skills);
         return "list";
     }
 
     @RequestMapping(value = "jobs")
     public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam String value) {
-        Iterable<Job> jobs;
+        Iterable<Job> jobs = jobRepository.findAll();
+        Iterable<Employer> employers = employerRepository.findAll();
+        Iterable<Skill> skills = skillRepository.findAll();
         if (column.toLowerCase().equals("all")){
-            jobs = jobRepository.findAll();
+           model.addAttribute("employers", employers);
+           model.addAttribute("jobs",jobs);
+           model.addAttribute("skills",skills);
             model.addAttribute("title", "All Jobs");
         } else {
             jobs = JobData.findByColumnAndValue(column, value, jobRepository.findAll());
@@ -61,6 +73,9 @@ public class ListController {
 
         }
         model.addAttribute("jobs",jobs);
+        model.addAttribute("employers", employers);
+        model.addAttribute("skills", skills);
+
 
         return "list-jobs";
     }

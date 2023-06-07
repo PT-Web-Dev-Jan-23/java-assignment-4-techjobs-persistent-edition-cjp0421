@@ -1,10 +1,9 @@
 package org.launchcode.techjobs.persistent.controllers;
 
 import org.launchcode.techjobs.persistent.models.Employer;
-import org.launchcode.techjobs.persistent.models.Job;
-import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
-import org.launchcode.techjobs.persistent.models.data.JobRepository;
-import org.launchcode.techjobs.persistent.models.data.SkillRepository;
+import org.launchcode.techjobs.persistent.data.EmployerRepository;
+import org.launchcode.techjobs.persistent.data.JobRepository;
+import org.launchcode.techjobs.persistent.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +27,7 @@ public class EmployerController {
     @Autowired
     private SkillRepository skillRepository;
 
-    @GetMapping("")
+    @GetMapping
     public String index(Model model) {
         model.addAttribute("employers",employerRepository.findAll());
         model.addAttribute("title", "All Employers");
@@ -38,20 +37,21 @@ public class EmployerController {
 
     @GetMapping("add")
     public String displayAddEmployerForm(Model model) {
+        model.addAttribute("title","Add Employer");
         model.addAttribute(new Employer());
         return "employers/add";
     }
 
     @PostMapping("add")
-    public String processAddEmployerForm(@ModelAttribute @Valid Employer newEmployer,
+    public String processAddEmployerForm(@Valid @ModelAttribute Employer newEmployer,
                                     Errors errors, Model model) {
 
         if(errors.hasErrors()) {
-
+            model.addAttribute("title","Add Employer");
+            model.addAttribute(new Employer());
             return "employers/add";
-        } else {
-            employerRepository.save(newEmployer);
         }
+            employerRepository.save(newEmployer);
         return "redirect:";
     }
 

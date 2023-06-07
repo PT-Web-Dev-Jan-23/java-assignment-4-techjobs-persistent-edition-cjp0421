@@ -1,5 +1,7 @@
 package org.launchcode.techjobs.persistent.models;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 public class Job extends AbstractEntity{
 
     @ManyToOne
+    @NotNull
     private Employer employer;
 
    @ManyToMany
@@ -38,6 +41,6 @@ public class Job extends AbstractEntity{
     }
 
     public void setSkills(List<Skill> skills) {
-        this.skills = skills;
+        this.skills.add((Skill) skills);
     }
 }
