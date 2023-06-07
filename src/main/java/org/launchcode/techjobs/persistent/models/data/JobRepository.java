@@ -1,4 +1,4 @@
-package org.launchcode.techjobs.persistent.data;
+package org.launchcode.techjobs.persistent.models.data;
 
 import org.launchcode.techjobs.persistent.models.Job;
 import org.springframework.data.repository.CrudRepository;
