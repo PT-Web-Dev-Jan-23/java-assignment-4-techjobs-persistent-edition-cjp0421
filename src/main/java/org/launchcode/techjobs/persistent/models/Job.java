@@ -8,9 +8,8 @@ import java.util.List;
 
 @Entity
 public class Job extends AbstractEntity{
-
-    @ManyToOne
     @NotNull
+    @ManyToOne
     private Employer employer;
 
    @ManyToMany
@@ -41,6 +40,6 @@ public class Job extends AbstractEntity{
     }
 
     public void setSkills(List<Skill> skills) {
-        this.skills.add((Skill) skills);
+        this.skills = skills;
     }
 }
