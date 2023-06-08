@@ -78,28 +78,12 @@ public class HomeController {
         Optional<Job> optionalJob = jobRepository.findById(jobId);
 
         if(optionalJob.isPresent()){
-            Job job = (Job) optionalJob.get();
+            Job job = optionalJob.get();
             model.addAttribute("job",job);
             return "view";
         } else{
             model.addAttribute("title", "Invalid Job ID");
         }
-
-
-//        if(result.isEmpty()){
-//
-//
-//        } else {
-         //   Job job = result.get();
-
-            //model.addAttribute("title", job.getName());
-//            model.addAttribute("job", job);
-//            model.addAttribute("employers",employerRepository.findAll());
-//            model.addAttribute("skills",skillRepository.findAll());
-//            //model.addAttribute("employer",job.getEmployer());
-//           // model.addAttribute("skills", job.getSkills());
-
-//        }
 
         return "view";
     }
