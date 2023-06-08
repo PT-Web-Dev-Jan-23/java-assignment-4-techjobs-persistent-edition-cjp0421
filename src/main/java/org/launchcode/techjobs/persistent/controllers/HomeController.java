@@ -1,5 +1,6 @@
 package org.launchcode.techjobs.persistent.controllers;
 
+import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.Job;
 import org.launchcode.techjobs.persistent.models.Skill;
 import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
@@ -53,23 +54,23 @@ public class HomeController {
     @PostMapping("add")
     public String processAddJobForm(@ModelAttribute @Valid Job newJob,
                                        Errors errors, Model model, @RequestParam int employerId, @RequestParam List<Integer> skills) {
-       // Optional<Employer> employer = employerRepository.findById(employerId);
-        List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
-        newJob.setSkills(skillObjs);
+
+
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
             return "add";
         } else {
-            //Optional<Job> job = jobRepository.findById(newJob.getId());
-            jobRepository.save(newJob);
-            model.addAttribute("employers", employerRepository.findAll());
-            //model.addAttribute("skills", skillObjs);
-            model.addAttribute("employer",employerRepository.findById(employerId));
-            model.addAttribute("skills",skillRepository.findAll());
-           // model.addAttribute("job",job);
 
+            model.addAttribute("employers", employerRepository.findAll());
+            model.addAttribute("employer", employerRepository.findById(employerId));
+            model.addAttribute("skills", skillRepository.findAll());
+
+//            Optional<Employer> employer = employerRepository.findById(employerId);
+            List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
+            newJob.setSkills(skillObjs);
+
+            jobRepository.save(newJob);
         }
-        //jobRepository.save(newJob);
         return "redirect:";
     }
 
@@ -78,31 +79,14 @@ public class HomeController {
         Optional<Job> optionalJob = jobRepository.findById(jobId);
 
         if(optionalJob.isPresent()){
-            Job job = (Job) optionalJob.get();
+            Job job = optionalJob.get();
             model.addAttribute("job",job);
+            model.addAttribute("employer", employerRepository.findAll());
+            model.addAttribute("skills",skillRepository.findAll());
             return "view";
         } else{
             model.addAttribute("title", "Invalid Job ID");
         }
-
-
-//        if(result.isEmpty()){
-//
-//
-//        } else {
-         //   Job job = result.get();
-
-            //model.addAttribute("title", job.getName());
-//            model.addAttribute("job", job);
-//            model.addAttribute("employers",employerRepository.findAll());
-//            model.addAttribute("skills",skillRepository.findAll());
-//            //model.addAttribute("employer",job.getEmployer());
-//           // model.addAttribute("skills", job.getSkills());
-
-//        }
-
         return "view";
     }
-
-
 }

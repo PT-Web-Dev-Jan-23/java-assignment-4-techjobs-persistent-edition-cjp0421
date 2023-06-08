@@ -87,6 +87,7 @@ public String listJobsByColumnAndValue(Model model, @RequestParam String column,
     } else {
         jobs = JobData.findByColumnAndValue(column, value, jobRepository.findAll());
         model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + value);
+
     }
     model.addAttribute("jobs", jobs);
 

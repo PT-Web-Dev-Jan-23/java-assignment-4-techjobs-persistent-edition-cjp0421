@@ -17,7 +17,7 @@ public class Employer extends AbstractEntity {
     @Size(message = "Must be between 1 and 255 characters.",max = 255,min=1)
     private String location;
 
-    @OneToMany
+    @OneToMany//(mappedBy = "employer")
     @JoinColumn(name="employer_id")
     private List<Job> jobs = new ArrayList<>();
 
