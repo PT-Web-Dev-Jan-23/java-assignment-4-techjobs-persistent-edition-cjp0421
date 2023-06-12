@@ -2,6 +2,8 @@ package org.launchcode.techjobs.persistent.controllers;
 
 import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
+import org.launchcode.techjobs.persistent.models.data.JobRepository;
+import org.launchcode.techjobs.persistent.models.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,49 +21,37 @@ public class EmployerController {
     @Autowired
     private EmployerRepository employerRepository;
 
+    @Autowired
+    private JobRepository jobRepository;
+
+    @Autowired
+    private SkillRepository skillRepository;
+
     @GetMapping("")
     public String index(Model model) {
         model.addAttribute("employers",employerRepository.findAll());
+        model.addAttribute("title", "All Employers");
         return "employers/index";
     }
 
-    @GetMapping("view")
-    public String index(@RequestParam(required=false) Integer employerId, Model model){
-        if(employerId == null){
-            model.addAttribute("title", "All Employers");
-            model.addAttribute("employers", employerRepository.findAll());
-        } else {
-            Optional<Employer> result = employerRepository.findById(employerId);
-            if(result.isEmpty()){
-                model.addAttribute("title","Invalid Employer Id: " + employerId);
-            } else {
-                Employer employer = result.get();
-                model.addAttribute("title", "Employer with ID" + employerId);
-                model.addAttribute("employers",employer.getName());
-            }
-        }
-        return "employers/view";
-    }
 
     @GetMapping("add")
     public String displayAddEmployerForm(Model model) {
+        model.addAttribute("title","Add Employer");
         model.addAttribute(new Employer());
         return "employers/add";
     }
 
     @PostMapping("add")
-    public String processAddEmployerForm(@ModelAttribute @Valid Employer newEmployer,
+    public String processAddEmployerForm(@Valid @ModelAttribute Employer newEmployer,
                                     Errors errors, Model model) {
 
-        if(!errors.hasErrors()) {
-
-            if (!employerRepository.toString().contains(newEmployer.getName())) {
-               Employer employer = employerRepository.save(newEmployer);
-                model.addAttribute("employer", employer);
-            }
-            return "redirect:";
+        if(errors.hasErrors()) {
+            model.addAttribute("title","Add Employer");
+            model.addAttribute(new Employer());
+            return "employers/add";
         }
-
+            employerRepository.save(newEmployer);
         return "redirect:";
     }
 

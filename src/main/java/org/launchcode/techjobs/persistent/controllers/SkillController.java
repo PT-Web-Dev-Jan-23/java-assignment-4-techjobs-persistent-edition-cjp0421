@@ -1,9 +1,6 @@
 package org.launchcode.techjobs.persistent.controllers;
 
-import org.launchcode.techjobs.persistent.models.Employer;
-import org.launchcode.techjobs.persistent.models.Job;
 import org.launchcode.techjobs.persistent.models.Skill;
-import org.launchcode.techjobs.persistent.models.data.JobRepository;
 import org.launchcode.techjobs.persistent.models.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,28 +19,11 @@ public class SkillController {
 
     @GetMapping("")
     public String index(Model model) {
+        model.addAttribute("title", "All Skills");
         model.addAttribute("skills",skillRepository.findAll());
         return "skills/index";
     }
 
-
-    @GetMapping("view")
-    public String displayAllSkills(@RequestParam(required=false) Integer skillId, Model model){
-        if(skillId == null){
-            model.addAttribute("title", "All Skills");
-            model.addAttribute("skills", skillRepository.findAll());
-        } else {
-            Optional<Skill> result = skillRepository.findById(skillId);
-            if(result.isEmpty()){
-                model.addAttribute("title","Invalid Skill Id: " + skillId);
-            } else {
-                Skill skill = result.get();
-                model.addAttribute("title", "Skill with ID" + skillId);
-                model.addAttribute("skill",skill.getName());
-            }
-        }
-        return "skills/index";
-    }
 
     @GetMapping("add")
     public String displayAddSkillForm(Model model) {
@@ -56,6 +36,7 @@ public class SkillController {
     public String processAddSkillForm(@ModelAttribute @Valid Skill newSkill,
                                          Errors errors, Model model) {
 
+
         if(!errors.hasErrors()) {
 
             if (!skillRepository.toString().contains(newSkill.getName())) {
@@ -64,9 +45,10 @@ public class SkillController {
             }
             return "redirect:";
         }
+            return "redirect:";
+        }
 
-        return "redirect:";
-    }
+
 
     @GetMapping("view/{skillId}")
     public String displayViewSkill(Model model, @PathVariable int skillId) {

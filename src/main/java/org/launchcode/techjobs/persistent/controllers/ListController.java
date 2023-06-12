@@ -39,40 +39,39 @@ public class ListController {
         columnChoices.put("employer", "Employer");
         columnChoices.put("skill", "Skill");
 
-
-
     }
 
     @RequestMapping("")
     public String list(Model model) {
 
-
+//        model.addAttribute("jobs",jobRepository.findAll());
         model.addAttribute("employers", employerRepository.findAll());
         model.addAttribute("skills", skillRepository.findAll());
-        model.addAttribute("jobs",jobRepository.findAll());
         return "list";
     }
 
-    @RequestMapping(value = "jobs")
-    public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam String value) {
-        Iterable<Job> jobs;
-        Iterable<Employer> employers;
-        Iterable<Skill> skills;
-        if (column.toLowerCase().equals("all")){
-            jobs = jobRepository.findAll();
-            employers = employerRepository.findAll();
-            skills = skillRepository.findAll();
-            model.addAttribute("title", "All Jobs");
-            model.addAttribute("jobs",jobs);
-            model.addAttribute("employers",employers);
-            model.addAttribute("skills", skills);
+
+@RequestMapping(value = "jobs")
+public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam String value) {
+    Iterable<Job> jobs;
+    Iterable<Employer> employers;
+    Iterable<Skill> skills;
+    if (column.toLowerCase().equals("all")){
+        jobs = jobRepository.findAll();
+        employers = employerRepository.findAll();
+        skills = skillRepository.findAll();
+        model.addAttribute("title", "All Jobs");
+        model.addAttribute("jobs",jobs);
+        model.addAttribute("employers",employers);
+        model.addAttribute("skills", skills);
 
 
-        } else {
-            jobs = JobData.findByColumnAndValue(column, value, jobRepository.findAll());
-            model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + value);
-        }
-        model.addAttribute("jobs", jobs);
+    } else {
+        jobs = JobData.findByColumnAndValue(column, value, jobRepository.findAll());
+        model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + value);
+
+    }
+    model.addAttribute("jobs", jobs);
 
         return "list-jobs";
     }

@@ -1,16 +1,21 @@
 package org.launchcode.techjobs.persistent.models;
 
+
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Job extends AbstractEntity{
 
+   // @NotNull(message = "Please provide an employer.")
     @ManyToOne
     private Employer employer;
 
-   @ManyToMany
+   @NotNull
+    @ManyToMany
     private List<Skill> skills = new ArrayList<>();
 
     public Job() {
@@ -40,4 +45,6 @@ public class Job extends AbstractEntity{
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
     }
+
+
 }
