@@ -44,31 +44,13 @@ public class ListController {
     @RequestMapping("")
     public String list(Model model) {
 
-        model.addAttribute("jobs",jobRepository.findAll());
+//        model.addAttribute("jobs",jobRepository.findAll());
         model.addAttribute("employers", employerRepository.findAll());
         model.addAttribute("skills", skillRepository.findAll());
         return "list";
     }
 
-//    @RequestMapping(value = "jobs")
-//    public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam String value) {
-//        Iterable<Job> jobs = jobRepository.findAll();
-//        Iterable<Employer> employers = employerRepository.findAll();
-//        Iterable<Skill> skills = skillRepository.findAll();
-//        if (column.toLowerCase().equals("all")){
-//           model.addAttribute("employers", employers);
-//           model.addAttribute("jobs",jobs);
-//           model.addAttribute("skills",skills);
-//            model.addAttribute("title", "All Jobs");
-//        } else {
-//            jobs = JobData.findByColumnAndValue(column, value, jobRepository.findAll());
-//            model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + value);
-//
-//
-//        }
-//        model.addAttribute("jobs",jobs);
-//       // model.addAttribute("employers", employers);
-//     //   model.addAttribute("skills", skills);
+
 @RequestMapping(value = "jobs")
 public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam String value) {
     Iterable<Job> jobs;
